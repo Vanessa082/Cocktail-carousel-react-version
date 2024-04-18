@@ -10,12 +10,7 @@ main {
   padding: 2rem;
   font-family: Arial, sans-serif;
 
-  h1 {
-    padding: 1rem;
-    text-transform: uppercase;
-    font-size: 2rem;
-  }
-
+  
   .carousel-container {
     transform: translateX(0);
     transition: transform 0.5s ease-in-out;
@@ -26,9 +21,9 @@ main {
     max-width: 600px;
     margin: 0 auto;
   }
-
+  
   /* .selected-drink   item in the carousel */
-
+  
   .selected-drink {
     width: 100%;
     display: flex;
@@ -40,7 +35,7 @@ main {
     box-shadow: 0 2px 4px #0000001a;
     transition: transform 0.5s ease-in-out;
   }
-
+  
   img {
     width: 460px;
     height: 300px;
@@ -51,49 +46,48 @@ main {
     font-size: 1.5rem;
     margin-top: 10px;
   }
-
-  .recipe-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-
+  
+  
   .recipe-dropdown {
+    display: none;
     color: #fff;
     background-color: #0e0e0f;
     opacity: 0.5;
     padding: 2rem;
     position: absolute;
     left: 5%;
-    bottom: 20%;
+    bottom: 35%;
     right: 5%;
-    max-height: 100%;
+    /* max-height: 100%; */
     transform: translateY(-500%);
     transition: 0.3s ease-in;
   }
-
+  
   .recipe-dropdown.active {
-    color: #fff;
-    background-color: #0e0e0f;
-    opacity: 0.5;
-    padding: 2rem;
-    position: absolute;
-    left: 5%;
-    bottom: 50%;
-    right: 5%;
-    max-height: 100%;
-    transform: translateY(-500%);
-    transition: 0.3s ease-out;
+    display: block;
+    transform: translateY(0);
+    animation: slideIn 0.3s ease-in;
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(-500%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
   }
 }
 
+h1 {
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 2rem;
+}
 /* Previous and next buttons styles */
 .prev,
 .next {
+  background-color: transparent;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -101,6 +95,15 @@ main {
   cursor: pointer;
 }
 
+.recipe-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
 .prev {
   left: 0;
 }
