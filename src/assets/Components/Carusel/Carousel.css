@@ -33,7 +33,17 @@ main {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 4px #0000001a;
-    transition: transform 0.5s ease-in-out;
+    transform: translateY(0);
+    animation: slideIn 0.3s ease-in;
+    
+    @keyframes slideIn {
+      from {
+        transform: translateY(-500%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
   }
   
   img {
@@ -58,7 +68,6 @@ main {
     left: 5%;
     bottom: 35%;
     right: 5%;
-    /* max-height: 100%; */
     transform: translateY(-500%);
     transition: 0.3s ease-in;
   }

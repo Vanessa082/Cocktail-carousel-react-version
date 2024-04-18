@@ -89,6 +89,7 @@ export function Carousel() {
               }`}
             >
               <p>{drinkData[currentIndex]?.strInstructions}</p>
+              
               {/* <h3>Ingredients</h3> */}
             </div>
           )}
