@@ -29,7 +29,7 @@ export function Carousel() {
       setCurrentIndex((prevIndex) => {
         return (prevIndex + 1) % drinkData.length;
       });
-    }, 2000);
+    }, 5000);
 
     return () => {
       // Clean up function
@@ -55,7 +55,7 @@ export function Carousel() {
     let showDrpDwn = !showRecipeDropdown;
 
     setShowRecipeDropdown(showDrpDwn);
-    // clearInterval(intervalId);
+    clearInterval(intervalId);
 
     if (showDrpDwn) {
       clearInterval(intervalId);
@@ -64,7 +64,7 @@ export function Carousel() {
         setCurrentIndex((prevIndex) => {
           return (prevIndex + 1) % drinkData.length;
         });
-      }, 2000);
+      }, 5000);
     }
   };
 
