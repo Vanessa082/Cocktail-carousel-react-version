@@ -16,7 +16,8 @@ This application is a carousel that displays drink data fetched from the "TheCoc
 
 ## Visuals
 
-![alt text](/Users/rebaseacademy/Desktop/Wah vanessa/Cocktail-carousel-react-version/src/assets/image/screencapture-localhost-5173-2024-04-25-16_57_44.png)
+![alt text](/image/screencapture-localhost-5173-2024-04-25-16_57_44.png
+)
 
 ## Installation
 

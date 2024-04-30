@@ -89,18 +89,17 @@ export function Carousel() {
               }`}
             >
               <p>{drinkData[currentIndex]?.strInstructions}</p>
-              
+
               {/* <h3>Ingredients</h3> */}
             </div>
           )}
-
-          <button
-            className="recipe-button"
-            onClick={() => handleViewRecipe(drinkData[currentIndex])}
-          >
-            {showRecipeDropdown ? "Close dropdown" : "View Recipe"}
-          </button>
         </div>
+        <button
+          className="recipe-button"
+          onClick={() => handleViewRecipe(drinkData[currentIndex])}
+        >
+          {showRecipeDropdown ? "Close dropdown" : "View Recipe"}
+        </button>
 
         <button className="prev" onClick={handlePrevBtn}>
           &#10094;
