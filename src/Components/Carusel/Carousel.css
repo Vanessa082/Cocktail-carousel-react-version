@@ -1,42 +1,38 @@
-@keyframes carouselSwitch {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-1 * 100%));
-  }
-}
-
-.Carousel {
+.container {
   display: flex;
   flex-direction: column;
+  position: relative;
   width: 100%;
   height: fit-content;
-  /* animation: carouselSwitch 5s linear infinite; */
+
+  margin: auto;
+
+  overflow: hidden;
+  background-color: #fff;
 }
 
-.selected-drink {
-  animation-play-state: paused;
-  
+.drink-carousel {
+  position: relative;
+  width: 100vw;
+  height: 70vh;
+  overflow: hidden;
+
   h1 {
     text-align: center;
-    padding: 1rem;
     text-transform: uppercase;
-    font-size: 4rem;
+    font-size: 3rem;
+    color: #0e0e0f;
+    padding: 10px 0;
   }
 
-  img{
-    width: 97vw;
-    height: 80vh;
+  img {
+    width: 100%;
+    height: 80%;
+    object-fit: fill;
   }
 }
 
-/* .selected-drink.details-visible {
-  animation-play-state: running;
-} */
-
 .recipe-details {
-  /* display: none; */
   color: #fff;
   background-color: #0e0e0f;
   opacity: 0.5;
@@ -47,10 +43,10 @@
   right: 5%;
   transform: translateY(-10%);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  /* transition: opacity 0.5s ease, visibility 0.5s ease; */
 }
 
- /* Previous and next buttons styles  */
+/* Previous and next buttons styles  */
 
 .prev,
 .next {
@@ -79,65 +75,3 @@
 .next {
   right: 0;
 }
-
-/* Main container styles */
-/* 
-@keyframes switchDrink {
-  0% {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  50% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50px);
-  }
-}
-
-.carousel {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  width: 100%;
-}
-.selected-drink {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #61babc;
-  width: 6000px;
-}
-
-
-.selected-drink.active {
-  display: block;
-  opacity: 1;
-}
-
-
-
-img {
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-}
-
-.drink-name {
-  font-size: 1.5rem;
-  margin-top: 10px;
-  color: #0e0e0f;
-}
-
-.selected-drink.active .recipe-dropdown {
-  display: block;
-  opacity: 1;
-}
-
-
-
- */

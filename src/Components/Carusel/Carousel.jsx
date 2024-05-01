@@ -58,8 +58,8 @@ export function Carousel() {
   };
 
   return (
-    <div className="Carousel">
-      <div className={`selected-drink ${showDetails ? "details-visible" : ""}`}>
+    <div className="container">
+      <div className={`drink-carousel ${showDetails ? "details-visible" : ""}`}>
         {drinks.length > 0 && (
           <>
            <h1 className="h1">{drinks[currentDrinkIndex]?.strDrink}</h1>
