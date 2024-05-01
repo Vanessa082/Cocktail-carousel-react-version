@@ -1,5 +1,87 @@
-/* Main container styles */
+@keyframes carouselSwitch {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-1 * 100%));
+  }
+}
 
+.Carousel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: fit-content;
+  /* animation: carouselSwitch 5s linear infinite; */
+}
+
+.selected-drink {
+  animation-play-state: paused;
+  
+  h1 {
+    text-align: center;
+    padding: 1rem;
+    text-transform: uppercase;
+    font-size: 4rem;
+  }
+
+  img{
+    width: 97vw;
+    height: 80vh;
+  }
+}
+
+/* .selected-drink.details-visible {
+  animation-play-state: running;
+} */
+
+.recipe-details {
+  /* display: none; */
+  color: #fff;
+  background-color: #0e0e0f;
+  opacity: 0.5;
+  padding: 2rem;
+  position: absolute;
+  left: 5%;
+  bottom: 35%;
+  right: 5%;
+  transform: translateY(-10%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+ /* Previous and next buttons styles  */
+
+.prev,
+.next {
+  background-color: transparent;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.recipe-details-btn {
+  background-color: #007bff;
+  font-size: 4rem;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 auto;
+}
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+/* Main container styles */
+/* 
 @keyframes switchDrink {
   0% {
     opacity: 0;
@@ -15,42 +97,33 @@
   }
 }
 
-.carousel-container {
-  position: relative;
-  width: 100vw;
-}
-
-.selected-drink {
+.carousel {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  background-color: #f9f9f9;
-  padding: 5px  0;
   width: 100%;
-  overflow: hidden;
-  animation: switchDrink 5s infinite;
+}
+.selected-drink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #61babc;
+  width: 6000px;
 }
 
-.recipe-dropdown {
-  display: none;
-  color: #fff;
-  background-color: #0e0e0f;
-  opacity: 0.5;
-  padding: 2rem;
-  position: absolute;
-  left: 5%;
-  bottom: 35%;
-  right: 5%;
-  transform: translateY(-10%);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+
+.selected-drink.active {
+  display: block;
+  opacity: 1;
 }
+
+
 
 img {
-  width: 100%;
-  height: 40vh;
-  padding: 2rem;
+  width: 100vw;
+  height: 100vh;
   object-fit: cover;
 }
 
@@ -65,37 +138,6 @@ img {
   opacity: 1;
 }
 
-h1 {
-  padding: 1rem;
-  text-transform: uppercase;
-  font-size: 2rem;
-}
 
-/* Previous and next buttons styles */
 
-.prev,
-.next {
-  background-color: transparent;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.recipe-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 0 auto;
-}
-.prev {
-  left: 0;
-}
-
-.next {
-  right: 0;
-}
+ */

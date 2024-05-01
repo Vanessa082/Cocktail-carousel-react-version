@@ -1,113 +1,111 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Carousel.css";
 
-let intervalId;
-
 export function Carousel() {
-  const [drinkData, setDrinkData] = useState([]);
-  const [showRecipeDropdown, setShowRecipeDropdown] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [drinks, setDrinks] = useState([]);
+  const [currentDrinkIndex, setCurrentDrinkIndex] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-    const fetchDrinkData = async () => {
-      const response = await fetch(
-        "https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a"
-      );
-      const data = await response.json();
-      if (data.drinks) {
-        setDrinkData(data.drinks.slice(0, 50));
+    const fetchDrinks = async () => {
+      try {
+        const response = await fetch(
+          "https://www.thecocktaildb.com/api/json/v1/1/search.php?s="
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        setDrinks(data.drinks);
+      } catch (error) {
+        console.error(error);
       }
     };
-
-    fetchDrinkData();
+    fetchDrinks();
   }, []);
 
   useEffect(() => {
-    if (drinkData.length <= 0) return;
-
-    intervalId = setInterval(() => {
-      setCurrentIndex((prevIndex) => {
-        return (prevIndex + 1) % drinkData.length;
-      });
+    const interval = setInterval(() => {
+      setCurrentDrinkIndex((prevIndex) => (prevIndex + 1) % drinks.length);
     }, 5000);
+    return () => clearInterval(interval);
+  }, [drinks]);
 
-    return () => {
-      // Clean up function
-      clearInterval(intervalId);
-    };
-  }, [drinkData]);
-
-  const handlePrevBtn = () => {
-    clearInterval(intervalId);
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + drinkData.length) % drinkData.length
+  const handlePrev = () => {
+    setCurrentDrinkIndex(
+      (prevIndex) => (prevIndex - 1 + drinks.length) % drinks.length
     );
+    clearInterval(interval);
   };
 
-  const handleNextBtn = () => {
-    clearInterval(intervalId);
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % drinkData.length);
+  const handleNext = () => {
+    setCurrentDrinkIndex((prevIndex) => (prevIndex + 1) % drinks.length);
+    clearInterval(interval);
   };
 
-  const handleViewRecipe = (drink) => {
-    if (!drink) return;
-
-    let showDrpDwn = !showRecipeDropdown;
-
-    setShowRecipeDropdown(showDrpDwn);
+  const handleDetails = () => {
+    setShowDetails(!showDetails);
     clearInterval(intervalId);
-
-    if (showDrpDwn) {
-      clearInterval(intervalId);
+    if (showDetails) {
+      clearInterval(interval);
     } else {
-      intervalId = setInterval(() => {
-        setCurrentIndex((prevIndex) => {
-          return (prevIndex + 1) % drinkData.length;
+      setInterval(() => {
+        setCurrentDrinkIndex((prevIndex) => {
+          return (prevIndex + 1) % drinks.length;
         });
       }, 5000);
     }
   };
 
-  // console.clear();
-  console.log(drinkData, currentIndex);
-  //
   return (
-    <main>
-      <div className="carousel-container">
-        <div className="selected-drink active">
-          <img
-            src={drinkData[currentIndex]?.strDrinkThumb}
-            alt="drink-image"
-            className="drink-image"
-          />
-          <h2 className="drink-name">{drinkData[currentIndex]?.strDrink}</h2>
-
-          {showRecipeDropdown && (
-            <div
-              className={`recipe-dropdown ${
-                showRecipeDropdown ? "active" : ""
-              }`}
-            >
-              <p>{drinkData[currentIndex]?.strInstructions}</p>
-
-              {/* <h3>Ingredients</h3> */}
-            </div>
-          )}
-        </div>
-        <button
-          className="recipe-button"
-          onClick={() => handleViewRecipe(drinkData[currentIndex])}
-        >
-          {showRecipeDropdown ? "Close dropdown" : "View Recipe"}
+    <div className="Carousel">
+      <div className={`selected-drink ${showDetails ? "details-visible" : ""}`}>
+        {drinks.length > 0 && (
+          <>
+           <h1 className="h1">{drinks[currentDrinkIndex]?.strDrink}</h1>
+            <img
+              src={drinks[currentDrinkIndex]?.strDrinkThumb}
+              alt={drinks[currentDrinkIndex]?.strDrink}
+              className="img"
+            />
+          </>
+        )}
+        {showDetails && (
+          <div className="recipe-details">
+            <h4>Ingredients:</h4>
+            <ul>
+              {Object.keys(drinks[currentDrinkIndex] || {}).map((key) => {
+                if (key.startsWith("strIngredient")) {
+                  const ingredient = drinks[currentDrinkIndex][key];
+                  if (ingredient) {
+                    return (
+                      <li key={key}>
+                        {ingredient}{" "}
+                        {drinks[currentDrinkIndex][`strMeasure${key.slice(10)}`] &&
+                          `- ${drinks[currentDrinkIndex][`strMeasure${key.slice(10)}`]}`}
+                      </li>
+                    );
+                  }
+                }
+                return null;
+              })}
+            </ul>
+            <h4>Instructions:</h4>
+            <p>{drinks[currentDrinkIndex]?.strInstructions}</p>
+          </div>
+        )}
+      </div>
+      <button className="recipe-details-btn" onClick={handleDetails}>
+        {showDetails ? "Close dropdown" : "View Recipe"}
+      </button>
+      <div className="buttons">
+        <button className="prev" onClick={handlePrev}>
+          ❮
         </button>
-
-        <button className="prev" onClick={handlePrevBtn}>
-          &#10094;
-        </button>
-        <button className="next" onClick={handleNextBtn}>
-          &#10095;
+        <button className="next" onClick={handleNext}>
+          ❯
         </button>
       </div>
-    </main>
+    </div>
   );
 }
