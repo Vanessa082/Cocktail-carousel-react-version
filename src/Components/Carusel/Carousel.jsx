@@ -1,109 +1,129 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./Carousel.css";
-
 export function Carousel() {
-  const [drinks, setDrinks] = useState([]);
+  const [drinkData, setDrinkData] = useState([]);
   const [currentDrinkIndex, setCurrentDrinkIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
+  const [showDetailsDiv, setShowDetailsDiv] = useState(false)
 
-  useEffect(() => {
-    const fetchDrinks = async () => {
-      try {
-        const response = await fetch(
-          "https://www.thecocktaildb.com/api/json/v1/1/search.php?s="
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
-        setDrinks(data.drinks);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchDrinks();
-  }, []);
+  let intervalId;
+  const handleShowDetailsbtn = (drink) =>{
+    if (!drink) return;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDrinkIndex((prevIndex) => (prevIndex + 1) % drinks.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [drinks]);
+    let showDetail = !showDetailsDiv;
 
-  const handlePrev = () => {
-    setCurrentDrinkIndex(
-      (prevIndex) => (prevIndex - 1 + drinks.length) % drinks.length
-    );
-    clearInterval(interval);
-  };
-
-  const handleNext = () => {
-    setCurrentDrinkIndex((prevIndex) => (prevIndex + 1) % drinks.length);
-    clearInterval(interval);
-  };
-
-  const handleDetails = () => {
-    setShowDetails(!showDetails);
+    setShowDetailsDiv(showDetail);
     clearInterval(intervalId);
-    if (showDetails) {
-      clearInterval(interval);
+
+    if (showDetail) {
+      clearInterval(intervalId);
     } else {
-      setInterval(() => {
+      intervalId = setInterval(() => {
         setCurrentDrinkIndex((prevIndex) => {
-          return (prevIndex + 1) % drinks.length;
+          return (prevIndex + 1) % drinkData.length;
         });
       }, 5000);
     }
-  };
+  }
+
+  useEffect(() => {
+    const fetchDrinkData = async () => {
+      const response = await fetch(
+        "https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a"
+      );
+      const data = await response.json();
+      if (data.drinks) {
+        setDrinkData(data.drinks.slice(0, 50));
+      }
+    };
+    fetchDrinkData();
+  }, []);
+
+  useEffect(() => {
+    if (drinkData <= 0) return;
+    intervalId = setInterval(() => {
+      setCurrentDrinkIndex((prevIndex) => {
+        return (prevIndex + 1) % drinkData.length;
+      });
+    }, 3000);
+
+    return () => {
+      // Clean up function
+      clearInterval(intervalId);
+    };
+  }, [drinkData]);
 
   return (
     <div className="container">
-      <div className={`drink-carousel ${showDetails ? "details-visible" : ""}`}>
-        {drinks.length > 0 && (
-          <>
-           <h1 className="h1">{drinks[currentDrinkIndex]?.strDrink}</h1>
-            <img
-              src={drinks[currentDrinkIndex]?.strDrinkThumb}
-              alt={drinks[currentDrinkIndex]?.strDrink}
-              className="img"
-            />
-          </>
-        )}
-        {showDetails && (
-          <div className="recipe-details">
-            <h4>Ingredients:</h4>
-            <ul>
-              {Object.keys(drinks[currentDrinkIndex] || {}).map((key) => {
-                if (key.startsWith("strIngredient")) {
-                  const ingredient = drinks[currentDrinkIndex][key];
-                  if (ingredient) {
-                    return (
-                      <li key={key}>
-                        {ingredient}{" "}
-                        {drinks[currentDrinkIndex][`strMeasure${key.slice(10)}`] &&
-                          `- ${drinks[currentDrinkIndex][`strMeasure${key.slice(10)}`]}`}
-                      </li>
-                    );
-                  }
-                }
-                return null;
-              })}
-            </ul>
-            <h4>Instructions:</h4>
-            <p>{drinks[currentDrinkIndex]?.strInstructions}</p>
+      <h1>Cocktail Carousel</h1>
+      <div className="wrapper">
+        <div className="wrapper-holder">
+          <div
+            className="slider"
+            style={{
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundImage: `URL(${drinkData[currentDrinkIndex]?.strDrinkThumb})`,
+            }}
+          >
+            <div className="drink-details">
+            <h2 className="str-name">
+              {drinkData[currentDrinkIndex]?.strDrink}
+            </h2>
+              <div className="str-ingredients-measure">
+                <h4>Ingredients</h4>
+                <ul>
+                  {Object.keys(drinkData[currentDrinkIndex] || {}).map(
+                    (key, index) => {
+                      if (
+                        key.startsWith("strIngredient") &&
+                        drinkData[currentDrinkIndex][key]
+                      ) {
+                        const ingredient = drinkData[currentDrinkIndex][key];
+                        const measure =
+                          drinkData[currentDrinkIndex][
+                            `strMeasure${index + 1}`
+                          ];
+                        return (
+                          <li key={index}>
+                            {ingredient}{" "}
+                            {measure && (
+                              <span className="measure">({measure})</span>
+                            )}
+                          </li>
+                        );
+                      }
+                      return null;
+                    }
+                  )}
+                </ul>
+              </div>
+              <div className="instructions">
+                <h4>Instructions</h4>
+                <div className="str-instructions">
+                  {drinkData[currentDrinkIndex]?.strInstructions
+                    .split(". ")
+                    .map((step, index) => (
+                      <p key={index}>{step}</p>
+                    ))}
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-      <button className="recipe-details-btn" onClick={handleDetails}>
-        {showDetails ? "Close dropdown" : "View Recipe"}
+
+      <button className="recipe-details-btn" onClick={handleShowDetailsbtn}>
+        {showDetailsDiv ? "Close dropdown" : "View Recipe"}
       </button>
-      <div className="buttons">
-        <button className="prev" onClick={handlePrev}>
-          ❮
+
+      <div className="direction-btn">
+        <button className="prev">
+        &#10094;
         </button>
-        <button className="next" onClick={handleNext}>
-          ❯
+        <button className="next">
+        &#10095;
         </button>
       </div>
     </div>
