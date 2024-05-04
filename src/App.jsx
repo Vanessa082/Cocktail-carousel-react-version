@@ -1,13 +1,13 @@
-import "./App.css";
-import { Carousel } from "./Components/Carusel/Carousel";
+import './App.css'
+import Carousel from './Components/Crousel/Carousel'
 
 function App() {
 
   return (
     <>
-      <Carousel />
+      <Carousel/>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
